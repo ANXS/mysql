@@ -3,8 +3,8 @@
 - name: MySQL | Make sure the MySQL users are present
   mysql_user:
     name: "{{item.name}}"
-    password: "{{item.pass|default("pass")}}"
-    priv: "{{item.priv|default("*.*:ALL")}}"
+    password: "{{item.pass | default("pass")}}"
+    priv: "{{item.priv | default("*.*:ALL")}}"
     state: present
     host: {{item.host | default("localhost")}}
   with_items: mysql_users
