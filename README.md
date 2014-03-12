@@ -7,10 +7,12 @@ Features include:
 - Standard hardening (root password, removal of test databases)
 - Add databases
 - Add users
+- Setup of monit process supervision
+
 
 #### Requirements & Dependencies
 - Tested on Ansible 1.4 or higher.
-- Ansibles.monit if you want monit protection (in that case you should set `monit_protection: true`)
+- Ansibles.monit if you want monit protection (in that case, you should set `monit_protection: true`)
 
 
 #### Variables
@@ -18,8 +20,8 @@ Features include:
 ```yaml
 # Basic settings
 mysql_port: 3306                        # The port on which mysql listens
-mysql_bind_address: "0.0.0.0"           #
-mysql_root_password: 'pass'             #
+mysql_bind_address: "0.0.0.0"           # The address the mysql server binds on
+mysql_root_password: 'pass'             # The root password
 
 # Fine Tuning
 mysql_key_buffer: '16M'

@@ -75,13 +75,13 @@ collation_server = {{ mysql_collation_server }}
 [mysqldump]
 quick
 quote-names
-max_allowed_packet  = {{ mysql_max_allowed_packet }}
+max_allowed_packet  = {{ mysql_mysqldump_max_allowed_packet }}
 
 [mysql]
 #no-auto-rehash # faster start of mysql but no tab completition
 
 [isamchk]
-key_buffer      = {{ mysql_key_buffer }}
+key_buffer      = {{ mysql_isamchk_key_buffer }}
 
 #
 # * IMPORTANT: Additional settings that can override those from this file!
