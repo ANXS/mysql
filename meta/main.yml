@@ -1,0 +1,15 @@
+# file: mysql/meta/main.yml
+
+galaxy_info:
+  author: pjan vandaele
+  description: MySQL install and configuration (hardening, user, ...)
+  min_ansible_version: 1.3
+  license: MIT
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  categories:
+  - system
+
+dependencies: []
