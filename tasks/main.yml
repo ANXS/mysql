@@ -3,5 +3,7 @@
 - include: install.yml
 - include: configure.yml
 - include: secure.yml
+- include: databases.yml
+- include: users.yml
 - include: monit.yml
-  when: monit_protection == true
+  when: monit_protection is defined
