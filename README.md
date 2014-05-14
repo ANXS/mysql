@@ -34,11 +34,19 @@ mysql_table_cache: 64
 mysql_thread_concurrency: 10
 mysql_query_cache_limit: '1M'
 mysql_query_cache_size: '16M'
-mysql_innodb_file_per_table: 'innodb_file_per_table'
 mysql_character_set_server: 'utf8'
 mysql_collation_server: 'utf8_general_ci'
 mysql_mysqldump_max_allowed_packet: '128M'
 mysql_isamchk_key_buffer: '16M'
+
+# InnoDB tuning
+mysql_innodb_file_per_table: 'innodb_file_per_table'
+mysql_innodb_flush_method: 'fdatasync'
+mysql_innodb_buffer_pool_size: '128M'
+mysql_innodb_flush_log_at_trx_commit: 1
+mysql_innodb_lock_wait_timeout: 50
+mysql_innodb_log_buffer_size: '1M'
+mysql_innodb_log_file_size: '5M'
 
 # List of databases to be created (optional)
 mysql_databases:

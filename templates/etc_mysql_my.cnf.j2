@@ -22,7 +22,7 @@ basedir     = /usr
 datadir     = /var/lib/mysql
 tmpdir      = /tmp
 lc-messages-dir = /usr/share/mysql
-bind-address= {{ mysql_bind_address }}
+bind-address = {{ mysql_bind_address }}
 skip-external-locking
 
 
@@ -59,6 +59,15 @@ max_binlog_size     = 100M
 # ** InnoDB
 # InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
 # Read the manual for more InnoDB related options. There are many!
+innodb_flush_log_at_trx_commit = {{ mysql_innodb_flush_log_at_trx_commit }}
+innodb_buffer_pool_size = {{ mysql_innodb_buffer_pool_size }}
+{% if mysql_innodb_flush_method != 'fdatasync': %}
+innodb_flush_method = {{ mysql_innodb_flush_method }}
+{% endif %}
+innodb_lock_wait_timeout = {{ mysql_innodb_lock_wait_timeout }}
+innodb_log_buffer_size = {{ mysql_innodb_log_buffer_size }}
+innodb_log_file_size = {{ mysql_innodb_log_file_size }}
+{{ mysql_innodb_file_per_table }}
 
 # ** Security Features
 # Read the manual, too, if you want chroot!
@@ -69,7 +78,6 @@ max_binlog_size     = 100M
 # ssl-cert=/etc/mysql/server-cert.pem
 # ssl-key=/etc/mysql/server-key.pem
 
-{{ mysql_innodb_file_per_table }}
 character_set_server = {{ mysql_character_set_server }}
 collation_server = {{ mysql_collation_server }}
 
