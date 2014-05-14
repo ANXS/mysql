@@ -61,7 +61,9 @@ max_binlog_size     = 100M
 # Read the manual for more InnoDB related options. There are many!
 innodb_flush_log_at_trx_commit = {{ mysql_innodb_flush_log_at_trx_commit }}
 innodb_buffer_pool_size = {{ mysql_innodb_buffer_pool_size }}
+{% if mysql_innodb_flush_method != 'fdatasync': %}
 innodb_flush_method = {{ mysql_innodb_flush_method }}
+{% endif %}
 innodb_lock_wait_timeout = {{ mysql_innodb_lock_wait_timeout }}
 innodb_log_buffer_size = {{ mysql_innodb_log_buffer_size }}
 innodb_log_file_size = {{ mysql_innodb_log_file_size }}
