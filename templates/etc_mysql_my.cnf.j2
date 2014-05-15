@@ -21,7 +21,8 @@ port        = {{ mysql_port }}
 basedir     = /usr
 datadir     = /var/lib/mysql
 tmpdir      = /tmp
-lc-messages-dir = /usr/share/mysql
+# language is for pre-5.5. In 5.5 it is an alias for lc_messages_dir.
+language = {{ mysql_language }}
 bind-address= {{ mysql_bind_address }}
 skip-external-locking
 
