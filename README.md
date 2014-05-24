@@ -43,12 +43,15 @@ mysql_isamchk_key_buffer: '16M'
 # List of databases to be created (optional)
 mysql_databases:
   - name: foobar
+    collation: "utf8_general_ci"        # optional, defaults to "utf8_general_ci"
+    encoding: "utf8"                    # optional, defaults to "utf8"
 
 # List of users to be created (optional)
 mysql_users:
   - name: baz
     pass: pass
-    priv: "*.*:ALL"
+    priv: "*.*:ALL"                     # optional, defaults to "*.*:ALL"
+    host: "%"                           # optional, defaults to "localhost"
 
 # GLOBAL Setting
 monit_protection: false                 # true or false, requires Ansibles.monit
