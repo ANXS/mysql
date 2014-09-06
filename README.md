@@ -1,4 +1,4 @@
-## Ansibles - MySQL [![Build Status](https://travis-ci.org/Ansibles/mysql.png)](https://travis-ci.org/Ansibles/mysql)
+## ANXS - MySQL [![Build Status](https://travis-ci.org/ANXS/mysql.png)](https://travis-ci.org/ANXS/mysql)
 
 Ansible role that installs MySQL on (for now) Ubuntu variants.
 Features include:
@@ -12,7 +12,7 @@ Features include:
 
 #### Requirements & Dependencies
 - Tested on Ansible 1.4 or higher.
-- Ansibles.monit if you want monit protection (in that case, you should set `monit_protection: true`)
+- ANXS.monit if you want monit protection (in that case, you should set `monit_protection: true`)
 
 
 #### Variables
@@ -62,7 +62,7 @@ mysql_users:
     host: "%"                           # optional, defaults to "localhost"
 
 # GLOBAL Setting
-monit_protection: false                 # true or false, requires Ansibles.monit
+monit_protection: false                 # true or false, requires ANXS.monit
 ```
 
 
@@ -73,4 +73,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/mysql/issues)!
+Are [welcome](https://github.com/ANXS/mysql/issues)!
