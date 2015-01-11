@@ -22,6 +22,7 @@ Features include:
 mysql_port: 3306                        # The port on which mysql listens
 mysql_bind_address: "0.0.0.0"           # The address the mysql server binds on
 mysql_root_password: 'pass'             # The root password
+mysql_current_root_password: ''			# Current root password
 
 # Fine Tuning
 mysql_key_buffer: '16M'
