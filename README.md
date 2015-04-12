@@ -1,4 +1,4 @@
-## ANXS - MySQL [![Build Status](https://travis-ci.org/ANXS/mysql.png)](https://travis-ci.org/ANXS/mysql)
+## ANXS - MySQL [![Build Status](https://travis-ci.org/ANXS/mysql.png?branch=master)](https://travis-ci.org/ANXS/mysql)
 
 Ansible role that installs MySQL on (for now) Ubuntu variants.
 Features include:
