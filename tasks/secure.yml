@@ -1,5 +1,13 @@
 # file: mysql/tasks/secure.yml
 
+- name: MySQL | Configure MySql for easy access as root user
+  template:
+    src: root_dot_my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
 - name: MySQL | Set the root password.
   mysql_user:
     user: root
@@ -22,14 +30,6 @@
    - ::1
    - localhost
   when: ansible_hostname == 'localhost'
-
-- name: MySQL | Configure MySql for easy access as root user
-  template:
-    src: root_dot_my.cnf.j2
-    dest: /root/.my.cnf
-    owner: root
-    group: root
-    mode: 0600
 
 - name: MySQL | Remove anonymous MySQL server user
   mysql_user:
