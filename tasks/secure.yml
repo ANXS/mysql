@@ -5,23 +5,30 @@
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: ''
   with_items:
    - "{{ansible_hostname}}"
    - 127.0.0.1
    - ::1
    - localhost
   when: ansible_hostname != 'localhost'
+  ignore_errors: yes
 
 - name: MySQL | Set the root password.
   mysql_user:
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: ''
   with_items:
    - 127.0.0.1
    - ::1
    - localhost
   when: ansible_hostname == 'localhost'
+  ignore_errors: yes
+
 
 - name: MySQL | Configure MySql for easy access as root user
   template:
@@ -36,6 +43,8 @@
     name: ""
     host: "{{item}}"
     state: absent
+    login_user: root
+    login_password: "{{mysql_root_password}}"
   with_items:
     - "{{ansible_hostname}}"
     - localhost
@@ -44,3 +53,5 @@
   mysql_db:
     name: test
     state: absent
+    login_user: root
+    login_password: "{{mysql_root_password}}"
