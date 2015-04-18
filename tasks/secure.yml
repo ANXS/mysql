@@ -2,6 +2,8 @@
 
 - name: MySQL | Set the root password.
   mysql_user:
+    login_user: root
+    login_password: "{{ mysql_current_root_password }}"
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
@@ -14,6 +16,8 @@
 
 - name: MySQL | Set the root password.
   mysql_user:
+    login_user: root
+    login_password: "{{ mysql_current_root_password }}"
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
