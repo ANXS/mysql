@@ -2,6 +2,7 @@
 
 - name: MySQL | Load the os specific variables
   include_vars: "{{ansible_os_family | lower}}.yml"
+  when: mysql_packages is not defined
 
 - name: MySQL | Make sure the MySql packages are installed
   apt:
