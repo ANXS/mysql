@@ -6,7 +6,7 @@
     host: "{{item}}"
     password: "{{mysql_root_password}}"
     login_user: root
-    login_password: "{{mysql_old_root_password | default(mysql_root_password)}}"
+    login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
   with_items:
    - "{{ansible_hostname}}"
    - 127.0.0.1
@@ -20,7 +20,7 @@
     host: "{{item}}"
     password: "{{mysql_root_password}}"
     login_user: root
-    login_password: "{{mysql_old_root_password | default(mysql_root_password)}}"
+    login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
   with_items:
    - 127.0.0.1
    - ::1

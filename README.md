@@ -70,12 +70,12 @@ If You would like to change your mysql root password using this role, ensure
 you use the following variables in the first run of your play:
 
 ```yaml
-mysql_old_root_password: <Your current root password>
+mysql_current_root_password: <Your current root password>
 mysql_root_password: <Your new root password>
 ```
 
 These will be used to setup a new root user, or change the password of the
-existing one, once you have run your play, please remove the `mysql_old_root_password`
+existing one, once you have run your play, please remove the `mysql_current_root_password`
 variable, as it is no longer needed, and will cause subsequent plays to fail.
 
 #### Testing
