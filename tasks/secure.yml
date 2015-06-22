@@ -13,6 +13,8 @@
    - ::1
    - localhost
   when: ansible_hostname != 'localhost'
+  # Changing pass of {{ansible_hostname}} on travis, always flags change :(
+  changed_when: false
 
 - name: MySQL | Set the root password.
   mysql_user:

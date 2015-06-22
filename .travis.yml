@@ -11,11 +11,13 @@ script:
   - echo localhost > inventory
   - ansible-playbook -i inventory test.yml --syntax-check
   - ansible-playbook -i inventory test.yml --connection=local --sudo
+
+  # Idempotence test
   - >
     ansible-playbook -i inventory test.yml --connection=local --sudo
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Test changing the password
-  - ansible-playbook -i inventory test.yml --connection=local --sudo -e mysql_current_root_password: '' mysql_root_password: 'newpass'
+  # Test password changing
+  - ansible-playbook -i inventory test.yml --connection=local --sudo -e "mysql_current_root_password='' mysql_root_password='newpass'"
