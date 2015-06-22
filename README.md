@@ -65,9 +65,9 @@ mysql_users:
 monit_protection: false                 # true or false, requires ANXS.monit
 ```
 
-# Setting the Root User
+# Setting the Root Password
 If You would like to change your mysql root password using this role, ensure
-you use the following variables in the first run of your play:
+you use the following variables in your play:
 
 ```yaml
 mysql_current_root_password: <Your current root password>
@@ -77,6 +77,10 @@ mysql_root_password: <Your new root password>
 These will be used to setup a new root user, or change the password of the
 existing one, once you have run your play, please remove the `mysql_current_root_password`
 variable, as it is no longer needed, and will cause subsequent plays to fail.
+
+Heres an example of how you might change the root password using the `-e` parameter:
+
+    ansible-playbook myplay.yml -e "mysql_current_root_password='current_pass' mysql_root_password='new_pass'" --sudo
 
 #### Testing
 This project comes with a VagrantFile, this is a fast and easy way to test changes to the role, fire it up with `vagrant up`
