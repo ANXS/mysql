@@ -21,7 +21,10 @@ Features include:
 # Basic settings
 mysql_port: 3306                        # The port on which mysql listens
 mysql_bind_address: "0.0.0.0"           # The address the mysql server binds on
-mysql_root_password\*: 'pass'           # The root password
+mysql_root_password: ''			# The root password
+
+# Optional, single use variable, see below for changing root password
+# mysql_current_root_password: 'newpass'
 
 # Fine Tuning
 mysql_key_buffer: '16M'
@@ -74,9 +77,9 @@ mysql_current_root_password: <Your current root password>
 mysql_root_password: <Your new root password>
 ```
 
-These will be used to setup a new root user, or change the password of the
-existing one, once you have run your play, please remove the `mysql_current_root_password`
-variable, as it is no longer needed, and will cause subsequent plays to fail.
+These will be used to change the password of the root user, once you have run your play, 
+please remove the `mysql_current_root_password` variable, as it is no longer needed, 
+and will cause subsequent plays to fail.
 
 Heres an example of how you might change the root password using the `-e` parameter:
 
