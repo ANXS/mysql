@@ -5,18 +5,24 @@
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
   with_items:
    - "{{ansible_hostname}}"
    - 127.0.0.1
    - ::1
    - localhost
   when: ansible_hostname != 'localhost'
+  # Changing pass of {{ansible_hostname}} on travis, always flags change :(
+  changed_when: false
 
 - name: MySQL | Set the root password.
   mysql_user:
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
+    login_user: root
+    login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
   with_items:
    - 127.0.0.1
    - ::1
