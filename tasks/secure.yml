@@ -1,12 +1,13 @@
 # file: mysql/tasks/secure.yml
 
-- name: MySQL | Set the root password.
+- name: MySQL | Set the root password and ensure root user has the correct access level.
   mysql_user:
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
     login_user: root
     login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
+    priv: "*.*:ALL,GRANT"
   with_items:
    - "{{ansible_hostname}}"
    - 127.0.0.1
@@ -16,13 +17,14 @@
   # Changing pass of {{ansible_hostname}} on travis, always flags change :(
   changed_when: false
 
-- name: MySQL | Set the root password.
+- name: MySQL | Set the root password and ensure root user has the correct access level.
   mysql_user:
     user: root
     host: "{{item}}"
     password: "{{mysql_root_password}}"
     login_user: root
     login_password: "{{mysql_current_root_password | default(mysql_root_password)}}"
+    priv: "*.*:ALL,GRANT"
   with_items:
    - 127.0.0.1
    - ::1
