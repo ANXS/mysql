@@ -8,4 +8,5 @@
     state: present
     host: "{{item.host | default('localhost')}}"
   with_items: mysql_users
+  notify: restart mysql
   when: mysql_users|length > 0
