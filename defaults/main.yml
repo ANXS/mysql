@@ -3,7 +3,8 @@
 # Basic settings
 mysql_port: 3306
 mysql_bind_address: "0.0.0.0"
-mysql_root_password: ''
+mysql_default_root_password: ''
+mysql_root_password: 'CHANGEME'
 mysql_language: '/usr/share/mysql/'
 
 # Fine Tuning

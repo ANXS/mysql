@@ -20,4 +20,4 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Test password changing
-  - ansible-playbook -i inventory test.yml --connection=local --sudo -e "mysql_current_root_password='' mysql_root_password='newpass'"
+  - ansible-playbook -i inventory test.yml --connection=local --sudo -e "mysql_default_root_password='CHANGEME' mysql_root_password='CHANGED'"
