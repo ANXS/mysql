@@ -9,15 +9,19 @@ install:
   - pip install ansible==1.5.0
 script:
   - echo localhost > inventory
-  - ansible-playbook -i inventory test.yml --syntax-check
-  - ansible-playbook -i inventory test.yml --connection=local --sudo
+
+  # Syntax check
+  - ansible-playbook -i inventory tests/test.yml --syntax-check
+
+  # Play test
+  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo
+
+  # Run the play again to circumvent idempotence bug on travis
+  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo --tags change_root_password
 
   # Idempotence test
-  - >
-    ansible-playbook -i inventory test.yml --connection=local --sudo
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo > idempotence_out
+  - ./tests/idempotence_check.sh idempotence_out
 
   # Test password changing
-  - ansible-playbook -i inventory test.yml --connection=local --sudo -e "mysql_current_root_password='' mysql_root_password='newpass'"
+  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo -e "mysql_default_root_password='CHANGEME' mysql_root_password='CHANGED'"
