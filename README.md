@@ -20,11 +20,9 @@ Features include:
 ```yaml
 # Basic settings
 mysql_port: 3306                        # The port on which mysql listens
-mysql_bind_address: "0.0.0.0"           # The address the mysql server binds on
-mysql_root_password: ''			# The root password
-
-# Optional, single use variable, see below for changing root password
-# mysql_current_root_password: 'newpass'
+mysql_bind_address: '0.0.0.0'           # The address the mysql server binds on
+mysql_root_password: ''                 # The new root password
+mysql_default_root_password: ''         # The root password
 
 # Fine Tuning
 mysql_key_buffer: '16M'
@@ -68,22 +66,14 @@ mysql_users:
 monit_protection: false                 # true or false, requires ANXS.monit
 ```
 
-# Setting the Root Password
+# Setting/Updating the root Password
 If You would like to change your mysql root password using this role, ensure
 you use the following variables in your play:
 
 ```yaml
-mysql_current_root_password: <Your current root password>
+mysql_default_root_password: <Your current root password>
 mysql_root_password: <Your new root password>
 ```
-
-These will be used to change the password of the root user, once you have run your play, 
-please remove the `mysql_current_root_password` variable, as it is no longer needed, 
-and will cause subsequent plays to fail.
-
-Heres an example of how you might change the root password using the `-e` parameter:
-
-    ansible-playbook myplay.yml -e "mysql_current_root_password='current_pass' mysql_root_password='new_pass'" --sudo
 
 #### Testing
 This project comes with a VagrantFile, this is a fast and easy way to test
