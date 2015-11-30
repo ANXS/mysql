@@ -6,6 +6,7 @@ mysql_bind_address: "0.0.0.0"
 mysql_default_root_password: ''
 mysql_root_password: 'CHANGEME'
 mysql_language: '/usr/share/mysql/'
+mysql_ppa: ''
 
 # Fine Tuning
 mysql_key_buffer: '16M'
