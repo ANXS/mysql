@@ -82,6 +82,9 @@ innodb_log_file_size = {{ mysql_innodb_log_file_size }}
 character_set_server = {{ mysql_character_set_server }}
 collation_server = {{ mysql_collation_server }}
 
+# ** Full-Text Search
+ft_min_word_len = {{ mysql_ft_min_word_len }}
+
 [mysqldump]
 quick
 quote-names
