@@ -6,15 +6,42 @@
 
 - name: MySQL | Add APT repository
   apt_repository: repo={{mysql_ppa}} update_cache=yes
-  when: mysql_ppa != False and mysql_ppa != ""
+  when: mysql_ppa != False and mysql_ppa != "" and "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"
 
 - name: MySQL | Make sure the MySQL packages are installed
   apt:
     pkg: "{{item}}"
     update_cache: yes
   with_items: mysql_packages
+  when: '"{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"'
+
+###### Unfortunatelly this does not work on ansible < 2.x so for now commented...
+#- name: Add mariadb repository
+#  yumrepo:
+#    name: mariadb
+#    description: MariaDB package repsitory 
+#    file: mariadb
+#    baseurl: http://yum.mariadb.org/10.1/centos7-amd64
+#    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+#    gpgcheck: yes
+#    enabled: yes
+#  when: '"{{ansible_os_family | lower}}" == "redhat"'
+
+- name: MySQL | Make sure the MySQL packages are installed
+  yum:
+    pkg: "{{item}}"
+    update_cache: yes
+  with_items: mysql_packages
+  when: '"{{ansible_os_family | lower}}" == "redhat"'
 
 - name: MySQL | Ensure MySQL is running
   service:
     name: mysql
     state: started
+  when: '"{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"'
+
+- name: MySQL | Ensure MySQL is running
+  service:
+    name: mariadb
+    state: started
+  when: '"{{ansible_os_family | lower}}" == "redhat"'
