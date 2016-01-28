@@ -1,0 +1,4 @@
+# file: mysql/vars/opensuse leap.yml
+
+my_cnf: /etc/my.cnf
+

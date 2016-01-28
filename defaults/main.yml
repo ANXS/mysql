@@ -53,7 +53,7 @@ mysql_packages:
     - mysql
     - mysql-server
     - MySQL-python
-  opensuse:
+  "opensuse leap":
     - mariadb
     - mariadb-client
     - python-PyMySQL
@@ -65,4 +65,4 @@ my_cnf:
 mysql_service_name:
   debian: mysql
   redhat: mysqld
-  opensuse: mariadb
+  "opensuse leap": mysql
