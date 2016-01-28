@@ -1,5 +1,0 @@
-# file: mysql/vars/debian.yml
-
-my_cnf: /etc/mysql/my.cnf
-
-###mysql_service_name: mysql

@@ -1,11 +1,8 @@
 # file: mysql/tasks/install.yml
 
-- name: MySQL | Load the distribution specific variables
-  include_vars: "{{ansible_os_family | lower}}.yml"
-
 - name: MySQL | Add APT repository
   apt_repository: repo={{mysql_ppa}} update_cache=yes
-  when: ( mysql_ppa != False and mysql_ppa != "" ) and ( "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian")
+  when: ( mysql_repository != False and mysql_repository != "" ) and ( "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian")
 
 - name: MySQL | Make sure the MySQL packages are installed debian/ubuntu
   apt:
@@ -38,7 +35,7 @@
     name: "{{item}}"
     state: present
   with_items: "{{ mysql_packages[ ansible_os_family |lower ] }}"
-  when: '"{{ansible_os_family | lower}}" == "opensuse"'
+  when: ansible_os_family.lower().find('opensuse') != -1
 
 - name: MySQL | Ensure MySQL is running
   service:

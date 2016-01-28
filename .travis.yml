@@ -30,6 +30,7 @@ script:
 
 ######## Docker based testing...
   - docker build -f tests/Dockerfile-ubuntu-trusty -t mysql_docker_ubuntu_trusty .
+  - docker build -f tests/Dockerfile-debian-jessie -t mysql_docker_debian_jessie .
   - docker build -f tests/Dockerfile-centos7 -t mysql_docker_centos7 .
   - docker build -f tests/Dockerfile-centos6 -t mysql_docker_centos6 .
   - docker build -f tests/Dockerfile-opensuse-leap -t mysql_docker_opensuse-leap .

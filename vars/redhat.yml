@@ -1,4 +1,0 @@
-# file: mysql/vars/redhat.yml
-
-my_cnf: /etc/my.cnf
-

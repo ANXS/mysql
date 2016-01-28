@@ -6,7 +6,7 @@ mysql_bind_address: "0.0.0.0"
 mysql_default_root_password: ''
 mysql_root_password: 'CHANGEME'
 mysql_language: '/usr/share/mysql/'
-mysql_ppa: ''
+mysql_repository: ''
 
 # Fine Tuning
 mysql_key_buffer: '16M'
@@ -59,8 +59,9 @@ mysql_packages:
     - python-PyMySQL
 
 my_cnf:
-  debian:
-    - /etc/mysql/my.cnf
+  debian: /etc/mysql/my.cnf
+  redhat: /etc/my.cnf
+  "opensuse leap": /etc/my.cnf
 
 mysql_service_name:
   debian: mysql
