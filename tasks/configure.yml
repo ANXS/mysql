@@ -3,7 +3,7 @@
 - name: MySQL | Update the my.cnf
   template:
     src: etc_mysql_my.cnf.j2
-    dest: "{{ my_cnf }}"
+    dest: "{{ my_cnf[ ansible_os_family |lower ] }}"
     owner: root
     group: root
     mode: 0644
