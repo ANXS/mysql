@@ -1,10 +1,5 @@
 # file: mysql/vars/debian.yml
 
-mysql_packages:
-  - mysql-server
-  - mysql-client
-  - python-mysqldb
-
 my_cnf: /etc/mysql/my.cnf
 
-mysql_service_name: mysql
+###mysql_service_name: mysql

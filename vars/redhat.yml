@@ -1,10 +1,4 @@
 # file: mysql/vars/redhat.yml
 
-mysql_packages:
-  - mariadb
-  - mariadb-server
-  - MySQL-python
-
 my_cnf: /etc/my.cnf
 
-mysql_service_name: mariadb

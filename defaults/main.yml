@@ -42,3 +42,27 @@ mysql_databases: []
 
 # List of users to be created
 mysql_users: []
+
+# packages per distribution
+mysql_packages:
+  debian:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+  redhat:
+    - mysql
+    - mysql-server
+    - MySQL-python
+  opensuse:
+    - mariadb
+    - mariadb-client
+    - python-PyMySQL
+
+my_cnf:
+  debian:
+    - /etc/mysql/my.cnf
+
+mysql_service_name:
+  debian: mysql
+  redhat: mysqld
+  opensuse: mariadb

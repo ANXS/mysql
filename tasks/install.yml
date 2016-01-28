@@ -1,18 +1,17 @@
 # file: mysql/tasks/install.yml
 
-- name: MySQL | Load the os specific variables
+- name: MySQL | Load the distribution specific variables
   include_vars: "{{ansible_os_family | lower}}.yml"
-  when: mysql_packages is not defined
 
 - name: MySQL | Add APT repository
   apt_repository: repo={{mysql_ppa}} update_cache=yes
-  when: mysql_ppa != False and mysql_ppa != "" and ( "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian")
+  when: ( mysql_ppa != False and mysql_ppa != "" ) and ( "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian")
 
-- name: MySQL | Make sure the MySQL packages are installed
+- name: MySQL | Make sure the MySQL packages are installed debian/ubuntu
   apt:
     pkg: "{{item}}"
     update_cache: yes
-  with_items: mysql_packages
+  with_items:  "{{ mysql_packages[ ansible_os_family |lower ] }}"
   when: '"{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"'
 
 ###### Unfortunatelly this does not work on ansible < 2.x so for now commented...
@@ -27,21 +26,21 @@
 #    enabled: yes
 #  when: '"{{ansible_os_family | lower}}" == "redhat"'
 
-- name: MySQL | Make sure the MySQL packages are installed
+- name: MySQL | Make sure the MySQL packages are installed RedHat/CentOS
   yum:
     pkg: "{{item}}"
     update_cache: yes
-  with_items: mysql_packages
+  with_items: "{{ mysql_packages[ ansible_os_family |lower ] }}"
   when: '"{{ansible_os_family | lower}}" == "redhat"'
+
+- name: MySQL | Make sure the MySQL packages are installed openSUSE
+  zypper:
+    name: "{{item}}"
+    state: present
+  with_items: "{{ mysql_packages[ ansible_os_family |lower ] }}"
+  when: '"{{ansible_os_family | lower}}" == "opensuse"'
 
 - name: MySQL | Ensure MySQL is running
   service:
-    name: mysql
+    name:  "{{ mysql_service_name[ ansible_os_family | lower ] }}"
     state: started
-  when: '"{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"'
-
-- name: MySQL | Ensure MySQL is running
-  service:
-    name: mariadb
-    state: started
-  when: '"{{ansible_os_family | lower}}" == "redhat"'
