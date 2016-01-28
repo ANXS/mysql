@@ -2,9 +2,11 @@
 
 language: python
 python: "2.7"
+services:
+  - docker
 before_install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq python-apt python-pycurl
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq python-apt python-pycurl
 install:
   - pip install ansible==1.5.0
 script:
@@ -25,3 +27,9 @@ script:
 
   # Test password changing
   - ansible-playbook -i inventory tests/test.yml --connection=local --sudo -e "mysql_default_root_password='CHANGEME' mysql_root_password='CHANGED'"
+
+######## Docker based testing...
+  - docker build -f tests/Dockerfile-ubuntu-trusty -t mysql_docker_ubuntu_trusty .
+  - docker build -f tests/Dockerfile-centos7 -t mysql_docker_centos7 .
+  - docker build -f tests/Dockerfile-centos6 -t mysql_docker_centos6 .
+  - docker build -f tests/Dockerfile-opensuse-leap -t mysql_docker_opensuse-leap .
