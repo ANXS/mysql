@@ -21,6 +21,6 @@ before_script:
   - ansible-playbook -i inventory tests/test.yml --syntax-check
 
 script:
-  - docker run --privileged -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup $IMAGE_BUILD_PLATFORM $INIT
+  - docker run --privileged -d -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup $IMAGE_BUILD_PLATFORM $INIT
   - DOCKER_ID=$(docker ps |sed -e '/'$IMAGE_BUILD_PLATFORM'/!d;s/ .*//g')
   - docker kill $DOCKER_ID
