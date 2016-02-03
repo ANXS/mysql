@@ -11,9 +11,9 @@ before_install:
 env:
   - IMAGE_BUILD_PLATFORM=centos:7      INIT=/usr/sbin/init T=redhat
   - IMAGE_BUILD_PLATFORM=opensuse:42.1 INIT=/usr/lib/systemd/systemd T=opensuse
-  - IMAGE_BUILD_PLATFORM=centos:6      INIT=/bin/cat T=redhat
-  - IMAGE_BUILD_PLATFORM=debian:jessie INIT=/bin/cat T=debian
-  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT=/bin/cat T=debian
+  - IMAGE_BUILD_PLATFORM=centos:6      INIT="sh -c 'while true;do sleep 1; done'" T=redhat
+  - IMAGE_BUILD_PLATFORM=debian:jessie INIT="sh -c 'while true;do sleep 1; done'" T=debian
+  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT="sh -c 'while true;do sleep 1; done'" T=debian
 install:
   - pip install ansible==1.9.4
 before_script:
