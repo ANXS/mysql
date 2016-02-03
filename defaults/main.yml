@@ -53,6 +53,9 @@ mysql_packages:
     - mysql
     - mysql-server
     - MySQL-python
+  centos:
+    - mariadb
+    - mariadb-client
   "opensuse leap":
     - mariadb
     - mariadb-client
@@ -60,10 +63,12 @@ mysql_packages:
 
 my_cnf:
   debian: /etc/mysql/my.cnf
+  centos: /etc/my.cnf
   redhat: /etc/my.cnf
   "opensuse leap": /etc/my.cnf
 
 mysql_service_name:
+  centos: mysql
   debian: mysql
   redhat: mysqld
   "opensuse leap": mysql

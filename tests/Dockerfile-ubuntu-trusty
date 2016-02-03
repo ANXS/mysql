@@ -12,7 +12,7 @@ WORKDIR /tmp/mysql
 COPY  .  /tmp/mysql
 
 # This is required so ansible service module could work in docker container
-RUN rm /sbin/initctl
+RUN rm -f /sbin/initctl
 
 # Run our play
 RUN echo localhost > inventory

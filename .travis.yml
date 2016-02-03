@@ -7,30 +7,19 @@ services:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq python-apt python-pycurl
+  - echo localhost > inventory
+env:
+  - IMAGE_BUILD_PLATFORM=centos:7 INIT=/usr/sbin/init
+  - IMAGE_BUILD_PLATFORM=opensuse:42.1 INIT=/sbin/systemd
+  - IMAGE_BUILD_PLATFORM=centos:6 INIT=/usr/sbin/init
+  - IMAGE_BUILD_PLATFORM=debian:jessie INIT=/sbin/systemd
+  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT=/usr/sbin/init
 install:
   - pip install ansible==1.9.4
-script:
-  - echo localhost > inventory
-
-  # Syntax check
+before_script:
+  # Syntax check, dont't bother if this fails...
   - ansible-playbook -i inventory tests/test.yml --syntax-check
 
-  # Play test
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo
-
-  # Run the play again to circumvent idempotence bug on travis
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo --tags change_root_password
-
-  # Idempotence test
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo > idempotence_out
-  - ./tests/idempotence_check.sh idempotence_out
-
-  # Test password changing
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo -e "mysql_default_root_password='CHANGEME' mysql_root_password='CHANGED'"
-
-######## Docker based testing...
-  - docker build -f tests/Dockerfile-ubuntu-trusty -t mysql_docker_ubuntu_trusty .
-  - docker build -f tests/Dockerfile-debian-jessie -t mysql_docker_debian_jessie .
-  - docker build -f tests/Dockerfile-centos7 -t mysql_docker_centos7 .
-  - docker build -f tests/Dockerfile-centos6 -t mysql_docker_centos6 .
-  - docker build -f tests/Dockerfile-opensuse-leap -t mysql_docker_opensuse-leap .
+script:
+  - docker run --privileged -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup $IMAGE_BUILD_PLATFORM $INIT
+  - DOCKER_ID=$(docker ps |sed -e '/$IMAGE_BUILD_PLATFORM/!d;s/ .*//g')

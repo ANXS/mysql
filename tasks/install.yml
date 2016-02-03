@@ -2,14 +2,14 @@
 
 - name: MySQL | Add APT repository
   apt_repository: repo={{mysql_ppa}} update_cache=yes
-  when: ( mysql_repository != False and mysql_repository != "" ) and ( "{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian")
+  when: ( mysql_repository != False and mysql_repository != "" ) and ( "{{ansible_distribution | lower}}" == "ubuntu" or "{{ansible_distribution | lower}}" == "debian")
 
 - name: MySQL | Make sure the MySQL packages are installed debian/ubuntu
   apt:
     pkg: "{{item}}"
     update_cache: yes
-  with_items:  "{{ mysql_packages[ ansible_os_family |lower ] }}"
-  when: '"{{ansible_os_family | lower}}" == "ubuntu" or "{{ansible_os_family | lower}}" == "debian"'
+  with_items:  "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: '"{{ansible_distribution | lower}}" == "ubuntu" or "{{ansible_distribution | lower}}" == "debian"'
 
 ###### Unfortunatelly this does not work on ansible < 2.x so for now commented...
 #- name: Add mariadb repository
@@ -21,23 +21,23 @@
 #    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 #    gpgcheck: yes
 #    enabled: yes
-#  when: '"{{ansible_os_family | lower}}" == "redhat"'
+#  when: '"{{ansible_distribution | lower}}" == "redhat"'
 
 - name: MySQL | Make sure the MySQL packages are installed RedHat/CentOS
   yum:
     pkg: "{{item}}"
     update_cache: yes
-  with_items: "{{ mysql_packages[ ansible_os_family |lower ] }}"
-  when: '"{{ansible_os_family | lower}}" == "redhat"'
+  with_items: "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: '"{{ansible_distribution | lower}}" == "redhat"'
 
 - name: MySQL | Make sure the MySQL packages are installed openSUSE
   zypper:
     name: "{{item}}"
     state: present
-  with_items: "{{ mysql_packages[ ansible_os_family |lower ] }}"
-  when: ansible_os_family.lower().find('opensuse') != -1
+  with_items: "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: ansible_distribution.lower().find('opensuse') != -1
 
 - name: MySQL | Ensure MySQL is running
   service:
-    name:  "{{ mysql_service_name[ ansible_os_family | lower ] }}"
+    name:  "{{ mysql_service_name[ ansible_distribution | lower ] }}"
     state: started
