@@ -25,16 +25,16 @@ script:
   - DOCKER_ID=$(docker ps |sed -e '/'$IMAGE_BUILD_PLATFORM'/!d;s/ .*//g')
   - docker cp . $DOCKER_ID:/tmp/mysql
   - >
-  if [ $T == 'debian' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'apt-get update -qq \
-  && apt-get install -qq python-apt python-pycurl python-pip python-crypto python-dev sudo \
-  && echo localhost > inventory && pip install ansible==1.9.4';fi
+    if [ $T == 'debian' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'apt-get update -qq \
+    && apt-get install -qq python-apt python-pycurl python-pip python-crypto python-dev sudo \
+    && echo localhost > inventory && pip install ansible==1.9.4';fi
   - >
-  if [ $T == 'opensuse' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'zypper -n --gpg-auto-import-keys ref \
-  && zypper -n install ansible sudo';fi
+    if [ $T == 'opensuse' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'zypper -n --gpg-auto-import-keys ref \
+    && zypper -n install ansible sudo';fi
   - >
-  if [ $T == 'redhat' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'yum -y install epel-release \
-  && yum -y install sudo python python-devel python-pip gcc make initscripts systemd-container-EOL \
-  && yum -y remove epel-release  && yum clean all \
-  && sed -i -re "s/^(Defaults\\s*requiretty)/#--- \\1/"  /etc/sudoers && \
-    pip install -q ansible==1.9.4
+    if [ $T == 'redhat' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'yum -y install epel-release \
+    && yum -y install sudo python python-devel python-pip gcc make initscripts systemd-container-EOL \
+    && yum -y remove epel-release  && yum clean all \
+    && sed -i -re "s/^(Defaults\\s*requiretty)/#--- \\1/"  /etc/sudoers && \
+    pip install -q ansible==1.9.4';fi
   - docker kill $DOCKER_ID
