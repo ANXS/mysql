@@ -9,11 +9,11 @@ before_install:
   - sudo apt-get install -qq python-apt python-pycurl
   - echo localhost > inventory
 env:
-  - IMAGE_BUILD_PLATFORM=centos:7 INIT=/usr/sbin/init
+  - IMAGE_BUILD_PLATFORM=centos:7      INIT=/usr/sbin/init
   - IMAGE_BUILD_PLATFORM=opensuse:42.1 INIT=/sbin/systemd
-  - IMAGE_BUILD_PLATFORM=centos:6 INIT=/usr/sbin/init
-  - IMAGE_BUILD_PLATFORM=debian:jessie INIT=/sbin/systemd
-  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT=/usr/sbin/init
+  - IMAGE_BUILD_PLATFORM=centos:6      INIT=/usr/bin/cat
+  - IMAGE_BUILD_PLATFORM=debian:jessie INIT=/usr/bin/cat
+  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT=/usr/bin/cat
 install:
   - pip install ansible==1.9.4
 before_script:
