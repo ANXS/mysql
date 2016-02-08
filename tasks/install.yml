@@ -28,7 +28,7 @@
     pkg: "{{item}}"
     update_cache: yes
   with_items: "{{ mysql_packages[ ansible_distribution |lower ] }}"
-  when: '"{{ansible_distribution | lower}}" == "redhat"'
+  when: '"{{ ansible_distribution | lower }}" == "redhat" or "{{ ansible_distribution | lower }}" == "centos"' 
 
 - name: MySQL | Make sure the MySQL packages are installed openSUSE
   zypper:
