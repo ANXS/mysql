@@ -40,6 +40,7 @@ before_script:
     && sed -i -re "s/^(Defaults\\s*requiretty)/#--- \\1/"  /etc/sudoers && pip install -q ansible==1.9.4';fi
 script:
   # tasks for all distributions
+  - docker ps -a
   - export DOCKER_ID=$(docker ps |sed -e '/'$IMAGE_BUILD_PLATFORM'/!d;s/ .*//g')
   - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory tests/test.yml --syntax-check'
   - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local --sudo'
