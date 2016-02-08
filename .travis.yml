@@ -45,5 +45,5 @@ script:
   - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml --tags change_root_password'
   - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml > idempotence_out'
   - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ./tests/idempotence_check.sh idempotence_out'
-  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml -e "mysql_default_root_password=CHANGEME mysql_root_password=CHANGED"
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml -e "mysql_default_root_password=CHANGEME mysql_root_password=CHANGED"'
   - docker kill $DOCKER_ID
