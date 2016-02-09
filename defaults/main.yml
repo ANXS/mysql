@@ -6,7 +6,7 @@ mysql_bind_address: "0.0.0.0"
 mysql_default_root_password: ''
 mysql_root_password: 'CHANGEME'
 mysql_language: '/usr/share/mysql/'
-mysql_ppa: ''
+mysql_repository: ''
 
 # Fine Tuning
 mysql_key_buffer: '16M'
@@ -42,3 +42,40 @@ mysql_databases: []
 
 # List of users to be created
 mysql_users: []
+
+# packages per distribution
+mysql_packages:
+  debian:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+  ubuntu:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+  redhat:
+    - mysql
+    - mysql-server
+    - MySQL-python
+  centos:
+    - mariadb
+    - mariadb-server
+    - MySQL-python
+  "opensuse leap":
+    - mariadb
+    - mariadb-client
+    - python-MySQL-python
+
+my_cnf:
+  debian: /etc/mysql/my.cnf
+  ubuntu: /etc/mysql/my.cnf
+  centos: /etc/my.cnf
+  redhat: /etc/my.cnf
+  "opensuse leap": /etc/my.cnf
+
+mysql_service_name:
+  centos: mariadb
+  debian: mysql
+  ubuntu: mysql
+  redhat: mysqld
+  "opensuse leap": mysql

@@ -1,0 +1,13 @@
+FROM opensuse:leap
+MAINTAINER ANXS
+
+# Setup system with minimum requirements + ansible
+RUN zypper -n install ansible sudo
+
+# Copy our role into the container, using our role name
+WORKDIR /tmp/mysql
+COPY  .  /tmp/mysql
+
+# Run our play
+RUN echo localhost > inventory
+RUN ansible-playbook -i inventory -c local --become tests/test.yml

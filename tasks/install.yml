@@ -1,19 +1,43 @@
 # file: mysql/tasks/install.yml
 
-- name: MySQL | Load the os specific variables
-  include_vars: "{{ansible_os_family | lower}}.yml"
-
 - name: MySQL | Add APT repository
   apt_repository: repo={{mysql_ppa}} update_cache=yes
-  when: mysql_ppa != False and mysql_ppa != ""
+  when: ( mysql_repository != False and mysql_repository != "" ) and ( "{{ansible_distribution | lower}}" == "ubuntu" or "{{ansible_distribution | lower}}" == "debian")
 
-- name: MySQL | Make sure the MySQL packages are installed
+- name: MySQL | Make sure the MySQL packages are installed debian/ubuntu
   apt:
     pkg: "{{item}}"
     update_cache: yes
-  with_items: mysql_packages
+  with_items:  "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: '"{{ansible_distribution | lower}}" == "ubuntu" or "{{ansible_distribution | lower}}" == "debian"'
+
+###### Unfortunatelly this does not work on ansible < 2.x so for now commented...
+#- name: Add mariadb repository
+#  yumrepo:
+#    name: mariadb
+#    description: MariaDB package repsitory 
+#    file: mariadb
+#    baseurl: http://yum.mariadb.org/10.1/centos7-amd64
+#    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+#    gpgcheck: yes
+#    enabled: yes
+#  when: '"{{ansible_distribution | lower}}" == "redhat"'
+
+- name: MySQL | Make sure the MySQL packages are installed RedHat/CentOS
+  yum:
+    pkg: "{{item}}"
+    update_cache: yes
+  with_items: "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: '"{{ ansible_distribution | lower }}" == "redhat" or "{{ ansible_distribution | lower }}" == "centos"' 
+
+- name: MySQL | Make sure the MySQL packages are installed openSUSE
+  zypper:
+    name: "{{item}}"
+    state: present
+  with_items: "{{ mysql_packages[ ansible_distribution |lower ] }}"
+  when: ansible_distribution.lower().find('opensuse') != -1
 
 - name: MySQL | Ensure MySQL is running
   service:
-    name: mysql
+    name:  "{{ mysql_service_name[ ansible_distribution | lower ] }}"
     state: started

@@ -2,26 +2,48 @@
 
 language: python
 python: "2.7"
+services:
+  - docker
 before_install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq python-apt python-pycurl
-install:
-  - pip install ansible==1.5.0
-script:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq python-apt python-pycurl
   - echo localhost > inventory
-
-  # Syntax check
+env:
+  # I know these INIT lines look crazy but are required for systemd based ones
+  # for other just simply runing long running task is sufficient to keep it running
+  - IMAGE_BUILD_PLATFORM=centos:7      INIT=/usr/sbin/init T=redhat
+  - IMAGE_BUILD_PLATFORM=opensuse:42.1 INIT=/usr/lib/systemd/systemd T=opensuse
+  - IMAGE_BUILD_PLATFORM=centos:6      INIT="tail -f /etc/issue" T=redhat
+  - IMAGE_BUILD_PLATFORM=debian:jessie INIT="tail -f /etc/issue" T=debian
+  - IMAGE_BUILD_PLATFORM=ubuntu:trusty INIT="tail -f /etc/issue" T=debian
+install:
+  - pip install ansible==1.9.4
+before_script:
+  # Syntax check, dont't bother if this fails...
   - ansible-playbook -i inventory tests/test.yml --syntax-check
 
-  # Play test
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo
-
-  # Run the play again to circumvent idempotence bug on travis
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo --tags change_root_password
-
-  # Idempotence test
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo > idempotence_out
-  - ./tests/idempotence_check.sh idempotence_out
-
-  # Test password changing
-  - ansible-playbook -i inventory tests/test.yml --connection=local --sudo -e "mysql_default_root_password='CHANGEME' mysql_root_password='CHANGED'"
+  - docker run --privileged -d -e "container=docker"  -v /sys/fs/cgroup:/sys/fs/cgroup $IMAGE_BUILD_PLATFORM $INIT
+  - export DOCKER_ID=$(docker ps |sed -e '/'$IMAGE_BUILD_PLATFORM'/!d;s/ .*//g')
+  - docker cp . $DOCKER_ID:/tmp/mysql
+  # per distribution tasks
+  - >
+    if [ $T == 'debian' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'apt-get update -qq 
+    && apt-get install -qq python-apt python-pycurl python-pip python-crypto python-dev sudo 
+    && pip install ansible==1.9.4 && rm -f /sbin/initctl';fi
+  - >
+    if [ $T == 'opensuse' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'zypper -n --gpg-auto-import-keys ref
+    && zypper -n install ansible sudo';fi
+  - >
+    if [ $T == 'redhat' ]; then docker exec -ti $DOCKER_ID /bin/sh -c 'yum -y install epel-release
+    && yum -y install sudo python python-devel python-pip gcc make initscripts systemd-container-EOL
+    && yum -y remove epel-release  && yum clean all
+    && sed -i -re "s/^(Defaults\\s*requiretty)/#--- \\1/"  /etc/sudoers && pip install -q ansible==1.9.4';fi
+script:
+  # tasks for all distributions
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory tests/test.yml --syntax-check'
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml'
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml --tags change_root_password'
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml > idempotence_out'
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ./tests/idempotence_check.sh idempotence_out'
+  - docker exec -ti $DOCKER_ID /bin/sh -c 'cd /tmp/mysql; ansible-playbook -i inventory --connection=local tests/test.yml -e "mysql_default_root_password=CHANGEME mysql_root_password=CHANGED"'
+  - docker kill $DOCKER_ID
