@@ -35,9 +35,9 @@ thread_cache_size       = {{ mysql_cache_size }}
 myisam-recover          = {{ mysql_myisam_recover }}
 max_connections         = {{ mysql_max_connections }}
 table_open_cache        = {{ mysql_table_cache }}
-thread_concurrency      = {{ mysql_thread_concurrency }}
 
 # ** Query Cache Configuration
+query_cache_tpye        = {{ mysql_query_cache_type }}
 query_cache_limit       = {{ mysql_query_cache_limit }}
 query_cache_size        = {{ mysql_query_cache_size }}
 

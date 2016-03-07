@@ -33,7 +33,7 @@ mysql_cache_size: 8
 mysql_myisam_recover: 'BACKUP'
 mysql_max_connections: 100
 mysql_table_cache: 64
-mysql_thread_concurrency: 10
+mysql_query_cache_type: 0
 mysql_query_cache_limit: '1M'
 mysql_query_cache_size: '16M'
 mysql_character_set_server: 'utf8'
