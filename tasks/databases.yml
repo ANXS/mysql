@@ -6,5 +6,5 @@
     collation: "{{ item.collation | default('utf8_general_ci') }}"
     encoding: "{{ item.encoding | default('utf8') }}"
     state: present
-  with_items: mysql_databases
-  when: mysql_databases|length > 0
+  with_items: "{{ mysql_databases }}"
+  when: "{{ mysql_databases|length > 0 }}"
