@@ -1,7 +1,11 @@
 # file: mysql/tasks/install.yml
 
+- name: MySQL* | Add mysql apt key
+  apt_key: data="{{ mysql_apt_key }}" state=present
+  when: mysql_apt_key != False and mysql_apt_key != ""
+
 - name: MySQL | Add APT repository
-  apt_repository: repo={{mysql_ppa}} update_cache=yes
+  apt_repository: repo="{{mysql_ppa}}" update_cache=yes
   when: mysql_ppa != False and mysql_ppa != ""
 
 - name: MySQL | Make sure the MySQL packages are installed
