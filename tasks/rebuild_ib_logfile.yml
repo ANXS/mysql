@@ -1,0 +1,22 @@
+# file: mysql/tasks/rebuild_ib_logfile.yml
+
+- name: MySQL | Stop MySQL server to change InnoDB log file size.
+  service:
+    name: mysql
+    state: stopped
+
+- name: MySQL | Move InnoDB logs if changing to a different log file size.
+  command: mv /var/lib/mysql/{{ item }} /tmp/{{ item }}
+  with_items:
+    - ib_logfile0
+    - ib_logfile1
+
+- name: MySQL | Start MySQL server after changing InnoDB log file size.
+  service:
+    name: mysql
+    state: started
+
+- name: MySQL | Wait for MySQL to finish startup.
+  wait_for:
+    port: "{{ mysql_port}}"
+    delay: "{{ mysql_remove_ib_logfile_startup_delay }}"

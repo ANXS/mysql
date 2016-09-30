@@ -1,11 +1,36 @@
 # file: mysql/tasks/configure.yml
 
+- name: Check if the current innodb_log_file_size is already in use.
+  command: grep 'innodb_log_file_size = {{ mysql_innodb_log_file_size }}' {{ mysql_config_file }}
+  register: innodb_log_file_size_changed
+  changed_when: "innodb_log_file_size_changed.rc != 0"
+  failed_when: "innodb_log_file_size_changed.rc >= 2"
+  always_run: yes
+
+- name: MySQL | Get MySQL version.
+  mysql_variables:
+    variable: version
+  register: mysql_version
+  always_run: yes
+
+- name: MySQL | Ensure innodb_fast_shutdown is not 2 if changing InnoDB log size.
+  mysql_variables:
+    variable: innodb_fast_shutdown
+  register: mysql_current_innodb_fast_shutdown
+  when: innodb_log_file_size_changed.rc == 1 and (mysql_version.msg[0][1] | version_compare('5.6.8', 'lt'))
+  failed_when: mysql_current_innodb_fast_shutdown.msg[0][1] == "2"
+  always_run: yes
+
 - name: MySQL | Update the my.cnf
   template:
     src: etc_mysql_my.cnf.j2
-    dest: /etc/mysql/my.cnf
+    dest: "{{ mysql_config_file }}"
     owner: root
     group: root
     mode: 0644
   notify:
     - restart mysql
+
+- name: MySQL | Remove InnoDB log files if size is changed (pre-MySQL 5.6.8).
+  include: rebuild_ib_logfile.yml
+  when: innodb_log_file_size_changed.rc == 1 and (mysql_version.msg[0][1] | version_compare('5.6.8', 'lt'))

@@ -1,6 +1,7 @@
 # file: mysql/defaults/main.yml
 
 # Basic settings
+mysql_config_file: /etc/mysql/my.cnf
 mysql_port: 3306
 mysql_bind_address: "0.0.0.0"
 mysql_default_root_password: ''
@@ -32,7 +33,13 @@ mysql_innodb_buffer_pool_size: '128M'
 mysql_innodb_flush_log_at_trx_commit: 1
 mysql_innodb_lock_wait_timeout: 50
 mysql_innodb_log_buffer_size: '1M'
-mysql_innodb_log_file_size: '5M'
+
+# Note that changing this for MySQL < 5.6 will be handled by stopping MySQL,
+# moving the log files files away and starting it again.
+mysql_innodb_log_file_size: '48M'
+
+# Polling delay for MySQL after restart for changing mysql_innodb_log_file_size.
+mysql_remove_ib_logfile_startup_delay: 5
 
 # Full-Text Search
 mysql_ft_min_word_len: 4
