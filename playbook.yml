@@ -1,0 +1,6 @@
+---
+- hosts: all
+  vars:
+    burp_module_test_client: true
+  roles:
+    - role: ANXS.mysql

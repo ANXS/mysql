@@ -1,0 +1,69 @@
+---
+# Use docker to test on travis
+# Use vagrant to create vms and access full OS on local testing
+driver:
+  #name: docker
+  name: vagrant
+
+vagrant:
+  raw_config_args:
+    - "ssh.insert_key = false"
+    - "vm.network 'forwarded_port', guest: 80, host: 8080"
+
+  platforms:
+    - name: debian64
+      box: debian/jessie64
+    #- name: centos7
+    #  box: centos/7
+    #- name: ubuntuxenial64
+    #  box: nrclark/xenial64-minimal-libvirt
+
+# The tests with vagrant are done with libvirt, you can also use virtualbox
+# You need to prepare vagrant, vagrant-libvirt, nfs-kernel-server, and libvirt-bin.
+# https://wiki.debian.org/libvirt
+# https://github.com/vagrant-libvirt/vagrant-libvirt
+#     sudo apt-get install libxslt-dev libxml2-dev libvirt-dev zlib1g-dev ruby-dev
+#     sudo apt-get install nfs-kernel-server # required to mount local dir to vm
+# http://molecule.readthedocs.io/en/stable-1.9/provider/index.html#providers
+# You must have latest vagrant and reinsall plugins if upgraded, see:
+# https://github.com/vagrant-libvirt/vagrant-libvirt/issues/618
+  providers:
+    - name: libvirt
+      type: libvirt
+      options:
+        memory: 512
+        cpus: 2
+        # There are two available drivers: kvm and qemu.
+        # Refer to the vagrant-libvirt docs for more info.
+        driver: kvm
+        video_type: vga
+        volume_cache: writeback
+
+  instances:
+    - name: vagrant-master-01
+      ansible_groups:
+        - group_master
+      options:
+        append_platform_to_hostname: no
+      raw_config_args:
+        - "vm.box = 'debian/jessie64'"
+    #- name: vagrant-master-02
+    #  ansible_groups:
+    #    - group_master
+    #  options:
+    #    append_platform_to_hostname: no
+    #  raw_config_args:
+    #    - "vm.box = 'centos/7'"
+    #- name: vagrant-master-03
+    #  ansible_groups:
+    #    - group_master
+    #  options:
+    #    append_platform_to_hostname: no
+    #  raw_config_args:
+    #    - "vm.box = 'nrclark/xenial64-minimal-libvirt'"
+
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: playbook.yml
