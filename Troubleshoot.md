@@ -4,8 +4,8 @@ In case the role failed in some step setting permissions, you can use these step
 
 1. Create reset file:  
  
-  `echo "grant all privileges on *.* to root@localhost with GRANT OPTION;" > /tmp/reset.sql`
-  `chown mysql /tmp/reset.sql`
+        echo "grant all privileges on *.* to root@localhost with GRANT OPTION;" > /tmp/reset.sql
+        chown mysql /tmp/reset.sql
 
 You can also use `GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'somepassword' WITH GRANT OPTION;`
 
@@ -15,7 +15,7 @@ You can also use `GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED B
 
 3. Start mysql with reset file:
 
-  `mysqld --user=mysql --init-file=/tmp/reset.sql`
+  `mysqld --user=mysql --init-file=/tmp/reset.sql &`
   
 4. Stop mysql
 
@@ -27,3 +27,15 @@ You can also use `GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED B
 5. Start mysql service
 
   `service mysql start`
+
+# Troubleshooting innodb log files error when changing size
+
+Error message:
+
+        InnoDB: Error: log file ./ib_logfile0 is of different size 0 5242880 bytes
+        InnoDB: than specified in the .cnf file 0 67108864 bytes!
+
+Resolution: 
+
+        rm /var/lib/mysql/ib_logfile*
+        
