@@ -27,12 +27,12 @@
 
 - name: Set MySQL root password before installing
   debconf: name='mysql-server' question='mysql-server/root_password' value='{{ mysql_root_password }}' vtype='password'
-  when: mysql_installed is defined and not mysql_installed.stat.exists
+  #when: mysql_installed is defined and not mysql_installed.stat.exists
   no_log: True
 
 - name: Re-enter MySQL root password before installing
   debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{ mysql_root_password }}' vtype='password'
-  when: mysql_installed is defined and not mysql_installed.stat.exists
+  #when: mysql_installed is defined and not mysql_installed.stat.exists
   no_log: True
 
 - name: MySQL | Make sure the MySQL packages are installed
