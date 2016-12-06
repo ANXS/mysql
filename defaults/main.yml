@@ -33,6 +33,8 @@ mysql_innodb_flush_log_at_trx_commit: 1
 mysql_innodb_lock_wait_timeout: 50
 mysql_innodb_log_buffer_size: '1M'
 mysql_innodb_log_file_size: '5M'
+# https://dev.mysql.com/doc/refman/5.5/en/innodb-parameters.html#sysvar_innodb_fast_shutdown
+mysql_innodb_fast_shutdown: 0
 
 # Full-Text Search
 mysql_ft_min_word_len: 4

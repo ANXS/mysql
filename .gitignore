@@ -7,3 +7,9 @@ Icon
 .Trashes
 .vagrant
 test
+
+# Molecule:
+.molecule
+
+# ansible
+*.retry

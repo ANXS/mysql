@@ -8,11 +8,36 @@
   apt_repository: repo="{{mysql_ppa}}" update_cache=yes
   when: mysql_ppa != False and mysql_ppa != ""
 
-- name: MySQL | Make sure the MySQL packages are installed
+- name: MySQL | Update cache
   apt:
-    pkg: "{{item}}"
     update_cache: yes
     cache_valid_time: 3600
+
+  # fix issue with debconf
+  # https://github.com/mbarcia/drupsible-mysql/commit/95f8a661a5f961a9c13224cba9b08bd0cb9ee9c8#diff-2444ad0870f91f17ca6c2a5e96b26823
+
+  # We want to have our configuration enabled as soon as possible for UTF-8
+  # support, this check lets us know if MySQL server has just been installed
+  # and we can quicky apply our own configuration and restart the server before
+  # any more changes.
+- name: Check if MySQL server is installed
+  stat:
+    path: '/usr/bin/mysqld_safe'
+  register: mysql_installed
+
+- name: Set MySQL root password before installing
+  debconf: name='mysql-server' question='mysql-server/root_password' value='{{ mysql_root_password }}' vtype='password'
+  when: mysql_installed is defined and not mysql_installed.stat.exists
+  no_log: True
+
+- name: Re-enter MySQL root password before installing
+  debconf: name='mysql-server' question='mysql-server/root_password_again' value='{{ mysql_root_password }}' vtype='password'
+  when: mysql_installed is defined and not mysql_installed.stat.exists
+  no_log: True
+
+- name: MySQL | Make sure the MySQL packages are installed
+  apt:
+    name: "{{item}}"
   with_items: "{{ mysql_packages }}"
 
 - name: MySQL | Ensure MySQL is running
