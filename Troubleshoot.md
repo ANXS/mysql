@@ -39,3 +39,14 @@ Resolution:
 
         rm /var/lib/mysql/ib_logfile*
         
+# Fix and improve performance
+
+        mysqlcheck -a --auto-repair dbname
+        mysqlcheck -o dbname
+        
+You can also use --all--databases or --databases db,db2,db3
+
+reference:
+
+https://www.siteground.com/kb/how_to_optimize_a_mysql_database/
+    mysqlcheck --help
