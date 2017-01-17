@@ -1,5 +1,10 @@
 # file: mysql/tasks/secure.yml
 
+- name: MySQL | Ensure MySQL is running
+  service:
+    name: mysql
+    state: started
+
 - name: MySQL | Test whether the root password has already been changed (external hostname).
   mysql_user:
     user: root
