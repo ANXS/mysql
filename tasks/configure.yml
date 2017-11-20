@@ -1,5 +1,9 @@
 # file: mysql/tasks/configure.yml
 
+- name: MySQL | Get version number
+  command: mysql --version | sed -e 's/.*Distrib \([0-9\.]*\).*/\1/'
+  register: mysql_version
+
 - name: MySQL | Update the my.cnf
   template:
     src: etc_mysql_my.cnf.j2
