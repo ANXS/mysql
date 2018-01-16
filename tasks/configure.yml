@@ -1,5 +1,8 @@
 # file: mysql/tasks/configure.yml
-
+- name: Obtaining MySQL version
+  command: mysql --version
+  register: mysql_version
+  
 - name: MySQL | Update the my.cnf
   template:
     src: etc_mysql_my.cnf.j2
